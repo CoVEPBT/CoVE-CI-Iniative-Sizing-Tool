@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Size your improvement at CoVE</title>
+<style>
+  /* ============================================================
+     CSS variables - matches the rest of the toolkit
+     ============================================================ */
+  :root {
+    --rmit-navy: #000F4B;
+    --rmit-red: #E60028;
+    --rmit-red-hover: #C41822;
+    --plan: #000F4B;
+    --do: #E60028;
+    --check: #4A4A5E;
+    --act: #0A5128;
+    --ink: #1A1A2E;
+    --ink-soft: #4A4A5E;
+    --ink-muted: #6B6B7D;
+    --bg-soft: #F5F6FA;
+    --bg-tint: #EEF0F7;
+    --bg-warn: #FEF3D2;
+    --bg-warn-ink: #6B4A0E;
+    --bg-success: #E8F0EA;
+    --border: #D8DAE5;
+    --border-soft: #E8EAF2;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  /* ============================================================
+     Reset & base
+     ============================================================ */
+  * { box-sizing: border-box; }
+
+  /* Scoped to the widget so it doesn't bleed out into SharePoint */
+  .dtree {
+    font-family: 'Aptos', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-soft);
+  }
+
+  .dtree * { box-sizing: border-box; }
+
+  /* ============================================================
+     Header
+     ============================================================ */
+  .dtree-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .dtree-eyebrow {
+    color: var(--rmit-red);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .dtree-title {
+    color: var(--rmit-navy);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .dtree-lede {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* ============================================================
+     Progress / step indicator
+     ============================================================ */
+  .dtree-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .dtree-progress-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .dtree-restart {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: none;
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+  }
+  .dtree-restart:hover {
+    color: var(--rmit-navy);
+    background: var(--bg-tint);
+  }
+  .dtree-restart.visible { display: inline-block; }
+  .dtree-restart::before { content: '↺  '; }
+
+  /* ============================================================
+     Criteria reference disclosure (used on classification questions)
+     ============================================================ */
+  .dtree-disclosure {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    overflow: hidden;
+  }
+  .dtree-disclosure-toggle {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 12px 18px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rmit-navy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .dtree-disclosure-toggle:hover {
+    background: var(--bg-tint);
+  }
+  .dtree-disclosure-toggle::before {
+    content: 'ⓘ';
+    color: var(--ink-muted);
+    font-size: 14px;
+    margin-right: 6px;
+  }
+  .dtree-disclosure-chevron {
+    color: var(--ink-muted);
+    font-size: 14px;
+    transition: transform 0.15s;
+  }
+  .dtree-disclosure.open .dtree-disclosure-chevron {
+    transform: rotate(90deg);
+  }
+  .dtree-disclosure-body {
+    display: none;
+    padding: 0 18px 16px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .dtree-disclosure.open .dtree-disclosure-body {
+    display: block;
+  }
+  .dtree-disclosure-intro {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 12px 0 14px;
+  }
+  .dtree-criteria-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .dtree-criteria-tier {
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    border-top: 3px solid var(--rmit-navy);
+  }
+  .dtree-criteria-tier.tier-l2 { border-top-color: var(--act); }
+  .dtree-criteria-tier.tier-l3 { border-top-color: #B8860B; }
+  .dtree-criteria-tier-name {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--rmit-navy);
+    margin-bottom: 8px;
+  }
+  .dtree-criteria-tier.tier-l2 .dtree-criteria-tier-name { color: var(--act); }
+  .dtree-criteria-tier.tier-l3 .dtree-criteria-tier-name { color: #B8860B; }
+  .dtree-criteria-row {
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin-bottom: 6px;
+  }
+  .dtree-criteria-row:last-child {
+    margin-bottom: 0;
+  }
+  .dtree-criteria-row strong {
+    color: var(--ink-muted);
+    font-weight: 600;
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* ============================================================
+     Result "why this classification" panel
+     ============================================================ */
+  .dtree-classification-detail {
+    margin: 18px 0 6px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+  }
+  .dtree-classification-detail-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .dtree-classification-row {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 4px 0;
+    color: var(--ink-soft);
+  }
+  .dtree-classification-row + .dtree-classification-row {
+    border-top: 1px dashed var(--border-soft);
+  }
+  .dtree-classification-label {
+    font-weight: 600;
+    color: var(--rmit-navy);
+    min-width: 70px;
+    flex-shrink: 0;
+  }
+  .dtree-classification-value {
+    flex: 1;
+  }
+  .dtree-classification-driver {
+    display: inline-block;
+    background: var(--rmit-red);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .dtree-classification-auth {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-soft);
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .dtree-classification-auth strong {
+    color: var(--rmit-navy);
+  }
+
+  /* Mobile: stack the criteria grid */
+  @media (max-width: 600px) {
+    .dtree-criteria-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ============================================================
+     Question card
+     ============================================================ */
+  .dtree-question {
+    margin-bottom: 8px;
+  }
+  .dtree-q-title {
+    color: var(--rmit-navy);
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.2px;
+    line-height: 1.3;
+  }
+  .dtree-q-help {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+
+  /* Answer options */
+  .dtree-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dtree-option {
+    text-align: left;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: border-color 0.12s, transform 0.08s, box-shadow 0.12s, background 0.08s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    line-height: 1.4;
+  }
+  .dtree-option:hover {
+    border-color: var(--rmit-navy);
+    background: var(--bg-tint);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 15, 75, 0.06);
+  }
+  .dtree-option:focus {
+    outline: 2px solid var(--rmit-red);
+    outline-offset: 2px;
+  }
+  .dtree-option-text {
+    flex: 1;
+  }
+  .dtree-option-title {
+    display: block;
+    font-weight: 600;
+    color: var(--rmit-navy);
+    margin-bottom: 4px;
+  }
+  .dtree-option-desc {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .dtree-option-arrow {
+    color: var(--ink-muted);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .dtree-option:hover .dtree-option-arrow {
+    color: var(--rmit-navy);
+  }
+
+  /* ============================================================
+     Back link
+     ============================================================ */
+  .dtree-back {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 8px 0;
+    margin-top: 16px;
+    text-decoration: none;
+  }
+  .dtree-back::before { content: '←  '; }
+  .dtree-back:hover { color: var(--rmit-navy); }
+  .dtree-back.hidden { display: none; }
+
+  /* ============================================================
+     Result card
+     ============================================================ */
+  .dtree-result {
+    border-radius: var(--radius-md);
+    padding: 28px 28px 24px;
+    margin-bottom: 8px;
+    border-left: 5px solid var(--rmit-navy);
+    background: var(--bg-tint);
+  }
+  .dtree-result-eyebrow {
+    color: var(--rmit-red);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .dtree-result-title {
+    color: var(--rmit-navy);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+  }
+  .dtree-result-why {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin: 0 0 20px;
+    line-height: 1.55;
+  }
+  .dtree-result-why strong {
+    color: var(--rmit-navy);
+  }
+  .dtree-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .dtree-btn-primary {
+    background: var(--rmit-red);
+    color: #fff;
+    padding: 11px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .dtree-btn-primary:hover { background: var(--rmit-red-hover); }
+  .dtree-btn-primary::after { content: ' →'; }
+  .dtree-btn-secondary {
+    background: #fff;
+    color: var(--rmit-navy);
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid var(--rmit-navy);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .dtree-btn-secondary:hover { background: var(--bg-tint); }
+
+  /* Variants for result card colour by branch */
+  .dtree-result.variant-lead {
+    border-left-color: var(--rmit-navy);
+    background: var(--bg-tint);
+  }
+  .dtree-result.variant-sponsor {
+    border-left-color: var(--act);
+    background: var(--bg-success);
+  }
+  .dtree-result.variant-sponsor .dtree-result-eyebrow { color: var(--act); }
+  .dtree-result.variant-warn {
+    border-left-color: #B8860B;
+    background: var(--bg-warn);
+  }
+  .dtree-result.variant-warn .dtree-result-title { color: var(--bg-warn-ink); }
+  .dtree-result.variant-warn .dtree-result-eyebrow { color: var(--bg-warn-ink); }
+  .dtree-result.variant-warn .dtree-result-why { color: var(--bg-warn-ink); }
+
+  /* Result footnote */
+  .dtree-result-footnote {
+    border-top: 1px solid rgba(0, 15, 75, 0.08);
+    padding-top: 14px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .dtree-result-footnote strong { color: var(--rmit-navy); }
+  .dtree-result-footnote a {
+    color: var(--rmit-navy);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--rmit-navy);
+  }
+  .dtree-result-footnote a:hover {
+    border-bottom-style: solid;
+  }
+
+  /* ============================================================
+     Animations
+     ============================================================ */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .dtree-stage {
+    animation: fadeIn 0.25s ease-out;
+  }
+
+  /* ============================================================
+     Mobile
+     ============================================================ */
+  @media (max-width: 600px) {
+    .dtree { padding: 20px 16px; border-radius: var(--radius-md); }
+    .dtree-title { font-size: 20px; }
+    .dtree-q-title { font-size: 19px; }
+    .dtree-option { padding: 14px 16px; font-size: 14px; }
+    .dtree-result { padding: 22px 20px 20px; }
+    .dtree-result-title { font-size: 20px; }
+    .dtree-btn-primary, .dtree-btn-secondary { width: 100%; justify-content: center; }
+  }
+
+  /* ============================================================
+     Reduced motion preference
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .dtree-stage { animation: none; }
+    .dtree-option { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!--
+  =============================================================
+  DECISION TREE WIDGET
+  =============================================================
+  This is a self-contained widget. To embed in SharePoint:
+   1. Copy this entire <div class="dtree">...</div> block AND the
+      <style> block from the head, AND the <script> block at the end.
+   2. Paste into a SharePoint Embed web part, or save as a standalone
+      HTML page and link it in an iframe.
+   3. No external dependencies — works offline.
+
+  Customisation: edit the `tree` data object in the <script> below.
+  Each node has questions and options. Each option either points to
+  another question (via `next`) or to a result (via `result`).
+  =============================================================
+-->
+
+<div class="dtree" id="dtree-widget">
+  <!-- Content rendered here by JS -->
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================================
+  // ⚡ URL CONFIGURATION — EDIT THIS BLOCK
+  // ============================================================
+  // Paste the real URL for each document or page below, between the
+  // quote marks. Leave the empty string ('') if a link isn't ready yet —
+  // the button will still appear but won't navigate anywhere.
+  //
+  // Tip: To get a SharePoint document URL, open the file in SharePoint,
+  // click the ⋯ menu next to it, choose "Copy link", and paste the URL
+  // below. Make sure the link permission matches your audience.
+  // ============================================================
+
+  var URLS = {
+
+    // ---- Toolkit destinations -----------------------------------
+    pdcaToolkitPage:    '',  // The PDCA / small-scale improvement toolkit page (L1 destination)
+    sponsorSubPage:     '',  // The "Sponsor an improvement" sub-page
+    ciFrameworkOverview:'',  // CoVE CI Framework overview / "what is this?" page
+
+    // ---- Support ------------------------------------------------
+    pbtBooking:         '',  // Booking page or mailto for PBT (Natalie/Deanne)
+    pbtContact:         '',  // PBT general contact (same as booking, or different)
+
+    // ---- L2 / L3 references -------------------------------------
+    sevenStepLifecycle: '',  // 7-Step CI Lifecycle page or doc (L2 destination, if it exists)
+    veltGovernance:     ''   // Formal governance / VELT pathway info (L3 destination, if it exists)
+
+  };
+
+  // ============================================================
+  // CRITERIA REFERENCE
+  // ============================================================
+  // Shown in the disclosure panel on classification questions, and
+  // referenced (via authorisation) in the result cards. Edit here if
+  // CoVE wording for the criteria changes.
+  // ============================================================
+
+  var CRITERIA = {
+    intro: 'CoVE classifies improvements into three levels against four criteria. The highest single criterion sets the level, so if any one criterion reaches Level 3, the whole initiative is treated as Level 3.',
+    tiers: [
+      {
+        id: 1,
+        name: 'Level 1',
+        rows: [
+          { label: 'Risk',          text: 'Low. Minor operational impact if unsuccessful; easily reversible with minimal disruption. No compliance or reputational implications.' },
+          { label: 'Scale',         text: 'Small/localised. Affects 1-2 teams within a single department; within direct control, no broader impact.' },
+          { label: 'Complexity',    text: 'Low. Single process change with minimal dependencies; no IT or policy changes; quick to test and implement.' },
+          { label: 'Stakeholder impact',  text: 'Low. Minimal BAU disruption; 1-10 stakeholders affected; minimal training required (e.g. brief communication or single session).' },
+          { label: 'Authorisation', text: 'Manager or Associate Director' },
+          { label: 'Approach',      text: 'PDCA cycle: Plan, Do, Check, Act' }
+        ]
+      },
+      {
+        id: 2,
+        name: 'Level 2',
+        rows: [
+          { label: 'Risk',          text: 'Low to moderate. Some operational impact, including temporary workflow disruption across teams. Minor compliance considerations and potential departmental reputation impact.' },
+          { label: 'Scale',         text: 'Moderate. Affects 2-3 teams and may involve 1-2 additional departments; requires coordination across groups.' },
+          { label: 'Complexity',    text: 'Moderate. Multiple interconnected elements; requires process mapping, stakeholder consultation, and possible policy or system adjustments.' },
+          { label: 'Stakeholder impact',  text: 'Moderate. Moderate disruption during implementation; multiple teams affected (10-30 staff); structured training (e.g. workshops, documentation) required.' },
+          { label: 'Authorisation', text: 'Associate Director or Associate DVC' },
+          { label: 'Approach',      text: '7-Step CI Lifecycle, with PBT facilitation support' }
+        ]
+      },
+      {
+        id: 3,
+        name: 'Level 3',
+        rows: [
+          { label: 'Risk',          text: 'Moderate to high. Significant operational, compliance, reputational or wellbeing impact. Difficult or costly to reverse; may involve regulatory or financial implications.' },
+          { label: 'Scale',         text: 'Large/cross-college. Impacts multiple departments or the entire college; involves enterprise functions (e.g. IT, HR, Finance) and broad stakeholder groups.' },
+          { label: 'Complexity',    text: 'High. Complex systems with many interdependencies; requires significant planning, phased implementation, and may include technology, policy and cultural change.' },
+          { label: 'Stakeholder impact',  text: 'High. Significant BAU disruption across the college; large number of stakeholders impacted; requires comprehensive training and formal change management.' },
+          { label: 'Authorisation', text: 'Associate DVC or VELT' },
+          { label: 'Approach',      text: 'Full CI lifecycle, formal governance, milestone reporting to VELT' }
+        ]
+      }
+    ],
+    // Authorisation text used inside the result cards (matches the tiers above)
+    authByLevel: {
+      1: 'Your manager or Associate Director',
+      2: 'Associate Director or Associate DVC',
+      3: 'Associate DVC or VELT'
+    }
+  };
+
+  // ============================================================
+  // DECISION TREE DATA
+  // ============================================================
+  // Each question has an id, title, optional help text, and options.
+  // Each option either has `next` (id of next question) or `result` (id of result).
+  // Each result has a variant (lead | sponsor | warn), title, why, and actions.
+  //
+  // Actions reference URLS by name (e.g., href: URLS.worksheet).
+  // Footnotes use {{name}} placeholders (e.g., {{pbtBooking}}) which are
+  // substituted at render time from the URLS config above.
+  // ============================================================
+
+  var tree = {
+    questions: {
+      // ---- Sizing / classification questions ----
+      // Four criteria from the CoVE CI Level Definitions: Risk, Scale,
+      // Complexity, Stakeholder impact. Each carries a level; the highest
+      // single level reached across all four sets the classification.
+      // "Not sure" carries no level and skips to the next criterion.
+      'q-risk': {
+        title: 'What happens if the change does not work?',
+        help: 'Think about how easily it could be reversed and who would feel it.',
+        showCriteria: true,
+        criteriaLabel: 'Risk',
+        options: [
+          {
+            title: 'Low',
+            desc: 'Minor operational impact if unsuccessful; easily reversible with minimal disruption. No compliance or reputational implications.',
+            next: 'q-scale',
+            level: 1
+          },
+          {
+            title: 'Low to moderate',
+            desc: 'Some operational impact, including temporary workflow disruption across teams. Minor compliance considerations and potential departmental reputation impact.',
+            next: 'q-scale',
+            level: 2
+          },
+          {
+            title: 'Moderate to high',
+            desc: 'Significant operational, compliance, reputational or wellbeing impact. Difficult or costly to reverse; may involve regulatory or financial implications.',
+            next: 'q-scale',
+            level: 3
+          },
+          {
+            title: 'Not sure yet',
+            desc: 'Skip this one for now.',
+            next: 'q-scale'
+          }
+        ]
+      },
+
+      'q-scale': {
+        title: 'How wide is the change?',
+        help: 'How many teams or departments does it touch?',
+        showCriteria: true,
+        criteriaLabel: 'Scale',
+        options: [
+          {
+            title: 'Small and localised',
+            desc: 'Affects 1-2 teams within a single department; within direct control, no broader impact.',
+            next: 'q-complexity',
+            level: 1
+          },
+          {
+            title: 'Moderate',
+            desc: 'Affects 2-3 teams and may involve 1-2 additional departments; requires coordination across groups.',
+            next: 'q-complexity',
+            level: 2
+          },
+          {
+            title: 'Large or cross-college',
+            desc: 'Impacts multiple departments or the entire college; involves enterprise functions (e.g. IT, HR, Finance) and broad stakeholder groups.',
+            next: 'q-complexity',
+            level: 3
+          },
+          {
+            title: 'Not sure yet',
+            desc: 'Skip this one for now.',
+            next: 'q-complexity'
+          }
+        ]
+      },
+
+      'q-complexity': {
+        title: 'How complex is the change to make?',
+        help: 'Think about dependencies, systems, and how much planning it needs.',
+        showCriteria: true,
+        criteriaLabel: 'Complexity',
+        options: [
+          {
+            title: 'Low',
+            desc: 'A single process change with minimal dependencies; no IT or policy changes; quick to test and implement.',
+            next: 'q-stakeholder',
+            level: 1
+          },
+          {
+            title: 'Moderate',
+            desc: 'Multiple interconnected elements; requires process mapping, stakeholder consultation, and possible policy or system adjustments.',
+            next: 'q-stakeholder',
+            level: 2
+          },
+          {
+            title: 'High',
+            desc: 'Complex systems with many interdependencies; requires significant planning, phased implementation, and may include technology, policy and cultural change.',
+            next: 'q-stakeholder',
+            level: 3
+          },
+          {
+            title: 'Not sure yet',
+            desc: 'Skip this one for now.',
+            next: 'q-stakeholder'
+          }
+        ]
+      },
+
+      'q-stakeholder': {
+        title: 'How many people does it affect, and how much?',
+        help: 'Consider disruption to business as usual and the training needed.',
+        showCriteria: true,
+        criteriaLabel: 'Stakeholder impact',
+        options: [
+          {
+            title: 'Low',
+            desc: 'Minimal BAU disruption; 1-10 stakeholders affected; minimal training required (e.g. brief communication or single session).',
+            next: 'classify',
+            level: 1
+          },
+          {
+            title: 'Moderate',
+            desc: 'Moderate disruption during implementation; multiple teams affected (10-30 staff); structured training such as workshops or documentation required.',
+            next: 'classify',
+            level: 2
+          },
+          {
+            title: 'High',
+            desc: 'Significant BAU disruption across the college; a large number of stakeholders impacted; requires comprehensive training and formal change management.',
+            next: 'classify',
+            level: 3
+          },
+          {
+            title: 'Not sure yet',
+            desc: 'Skip this one for now.',
+            next: 'classify'
+          }
+        ]
+      }
+    },
+
+    results: {
+      // ---- Classification results ---------------------------------------
+
+      'r-level-1': {
+        variant: 'lead',
+        eyebrow: 'Recommended level: Level 1, PDCA cycle',
+        title: 'A small-scale (Level 1) improvement looks like the best fit',
+        why: 'Based on what you\u2019ve said, this reads as a <strong>small, low-risk change within your team</strong>, so a <strong>PDCA cycle</strong> is the recommended starting point: plan a small test, run it on a small scale, check what happened, then decide what to do next. Roughly 4-6 hours of work across 2-3 weeks, and you can run it with your manager\u2019s sign-off. This is a guide rather than a rule, so if your situation feels different, PBT can help you sense-check it.',
+        footnote: 'The toolkit page has a Delegation Brief your sponsor will need to sign. Talk to PBT first if you want a sense-check before starting.'
+      },
+
+      'r-level-2': {
+        variant: 'sponsor',
+        eyebrow: 'Recommended level: Level 2, 7-Step CI Lifecycle',
+        title: 'A Level 2 improvement looks like the recommended fit, with PBT support',
+        why: 'Based on what you\u2019ve said, this change <strong>crosses team or department boundaries</strong> with moderate complexity, which points beyond a small-scale PDCA cycle. The recommended approach is the <strong>7-Step CI Lifecycle</strong>: identify, analyse, solve, implement and measure, with PBT facilitation support and formal approvals along the way. Treat this as a guide, and PBT can confirm the right pathway with you.',
+        footnote: 'PBT will help you scope the work and identify the right governance pathway.'
+      },
+
+      'r-level-3': {
+        variant: 'warn',
+        eyebrow: 'Recommended level: Level 3, formal governance',
+        title: 'This is likely to need formal governance and senior sponsorship',
+        why: 'Based on what you\u2019ve said, this reads as a <strong>large, cross-departmental change</strong> with significant impact and risk, which points well beyond a small-scale improvement. The recommended pathway involves formal project governance, milestone reporting and senior sponsorship before work starts. This is a guide to help you plan the conversation, and PBT with your Associate Director can shape the detail with you.',
+        footnote: 'Start with PBT and your Associate Director \u2014 they\u2019ll help shape it into the right kind of initiative and route it through formal governance.'
+      },
+
+      // ---- Other endpoints ----------------------------------------------
+
+      'r-not-sure-yet': {
+        variant: 'warn',
+        eyebrow: 'Worth a conversation first',
+        title: 'Start with a 30-minute chat with PBT',
+        why: 'If you don\u2019t yet know the scope or impact of your idea, that\u2019s normal at this stage. The fastest way forward is a <strong>short conversation with PBT</strong> to help you shape it. They\u2019ll help you work out whether it\u2019s a small-scale improvement, a bigger CI initiative, or something else entirely \u2014 and what to do next.',
+        footnote: 'PBT contacts: Natalie Gray or Deanne Roze.'
+      }
+    }
+  };
+
+
+  // Total questions in the longest path (for progress indicator).
+  // Longest path: q-risk \u2192 q-scale \u2192 q-complexity \u2192 q-stakeholder \u2192 result, so 4 questions.
+  var MAX_QUESTIONS = 4;
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  var state = {
+    history: [],         // stack of question ids we've visited
+    levels: [],          // stack of level values from classification options (mirrors history)
+    answers: [],         // stack of {criteriaLabel, optionTitle, level} for classification questions
+    disclosureOpen: false, // whether the criteria reference panel is expanded
+    current: 'q-risk',   // current question id (or result id if showing a result)
+    showingResult: false
+  };
+
+  // ============================================================
+  // RENDER
+  // ============================================================
+  var widget = document.getElementById('dtree-widget');
+
+  function render() {
+    var html = '';
+
+    // Header
+    html += '<div class="dtree-header">';
+    html += '<div class="dtree-eyebrow">CoVE Continuous Improvement</div>';
+    html += '<h1 class="dtree-title">Size your improvement</h1>';
+    html += '<p class="dtree-lede">Answer a few quick questions and we\u2019ll suggest the right level and approach to start with.</p>';
+    html += '</div>';
+
+    // Progress strip
+    var progressLabel = '';
+    if (state.showingResult) {
+      progressLabel = 'Recommendation';
+    } else {
+      var stepNum = state.history.length + 1;
+      progressLabel = 'Question ' + stepNum + ' of up to ' + MAX_QUESTIONS;
+    }
+    html += '<div class="dtree-progress">';
+    html += '<span class="dtree-progress-label">' + progressLabel + '</span>';
+    html += '<button class="dtree-restart' + (state.history.length > 0 || state.showingResult ? ' visible' : '') + '" id="dtree-restart-btn">Start over</button>';
+    html += '</div>';
+
+    // Question or result
+    html += '<div class="dtree-stage" key="' + state.current + '">';
+    if (state.showingResult) {
+      html += renderResult(tree.results[state.current]);
+    } else {
+      html += renderQuestion(tree.questions[state.current]);
+    }
+    html += '</div>';
+
+    // Back link
+    if (state.history.length > 0) {
+      html += '<button class="dtree-back" id="dtree-back-btn">Back to previous question</button>';
+    }
+
+    widget.innerHTML = html;
+    attachListeners();
+  }
+
+  function renderQuestion(q) {
+    var html = '<div class="dtree-question">';
+    html += '<h2 class="dtree-q-title">' + escapeHtml(q.title) + '</h2>';
+    if (q.help) {
+      html += '<p class="dtree-q-help">' + escapeHtml(q.help) + '</p>';
+    }
+
+    // Optional criteria reference disclosure (for classification questions)
+    if (q.showCriteria) {
+      html += renderCriteriaDisclosure();
+    }
+
+    html += '<div class="dtree-options">';
+    q.options.forEach(function(opt, idx) {
+      html += '<button class="dtree-option" data-option-idx="' + idx + '">';
+      html += '<span class="dtree-option-text">';
+      html += '<span class="dtree-option-title">' + escapeHtml(opt.title) + '</span>';
+      if (opt.desc) {
+        html += '<span class="dtree-option-desc">' + escapeHtml(opt.desc) + '</span>';
+      }
+      html += '</span>';
+      html += '<span class="dtree-option-arrow">\u203A</span>';
+      html += '</button>';
+    });
+    html += '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderCriteriaDisclosure() {
+    var openClass = state.disclosureOpen ? ' open' : '';
+    var html = '<div class="dtree-disclosure' + openClass + '" id="dtree-disclosure">';
+    html += '<button class="dtree-disclosure-toggle" id="dtree-disclosure-toggle" aria-expanded="' + (state.disclosureOpen ? 'true' : 'false') + '">';
+    html += '<span>What do L1, L2, and L3 mean? See the criteria</span>';
+    html += '<span class="dtree-disclosure-chevron">\u203A</span>';
+    html += '</button>';
+    html += '<div class="dtree-disclosure-body">';
+    html += '<p class="dtree-disclosure-intro">' + escapeHtml(CRITERIA.intro) + '</p>';
+    html += '<div class="dtree-criteria-grid">';
+    CRITERIA.tiers.forEach(function(tier) {
+      var tierClass = 'tier-l' + tier.id;
+      html += '<div class="dtree-criteria-tier ' + tierClass + '">';
+      html += '<div class="dtree-criteria-tier-name">' + escapeHtml(tier.name) + '</div>';
+      tier.rows.forEach(function(row) {
+        html += '<div class="dtree-criteria-row">';
+        html += '<strong>' + escapeHtml(row.label) + '</strong>';
+        html += escapeHtml(row.text);
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderResult(r) {
+    var variantClass = 'variant-' + (r.variant || 'lead');
+    var html = '<div class="dtree-result ' + variantClass + '">';
+    html += '<div class="dtree-result-eyebrow">' + escapeHtml(r.eyebrow) + '</div>';
+    html += '<h2 class="dtree-result-title">' + escapeHtml(r.title) + '</h2>';
+    html += '<p class="dtree-result-why">' + r.why + '</p>';  // why allows HTML (strong tags)
+
+    // For classification results (r-level-1, r-level-2, r-level-3), show the
+    // "why this classification?" panel summarising the user's answers.
+    if (/^r-level-[123]$/.test(state.current) && state.answers.length > 0) {
+      html += renderClassificationDetail();
+    }
+
+    // Action buttons only render if a result defines them. Left empty for now
+    // (pure decision tool); links can be added back per result later.
+    if (r.actions && r.actions.length > 0) {
+      html += '<div class="dtree-result-actions">';
+      r.actions.forEach(function(action) {
+        var btnClass = action.type === 'primary' ? 'dtree-btn-primary' : 'dtree-btn-secondary';
+        var href = resolveHref(action.href);
+        html += '<a href="' + escapeAttr(href) + '" class="' + btnClass + '" target="_blank" rel="noopener">' + escapeHtml(action.label) + '</a>';
+      });
+      html += '</div>';
+    }
+    if (r.footnote) {
+      html += '<div class="dtree-result-footnote">' + resolveFootnote(r.footnote) + '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderClassificationDetail() {
+    // Compute max level from answers and identify the driving criterion (first answer at the max level)
+    var maxLevel = 0;
+    state.answers.forEach(function(a) {
+      if (a.level > maxLevel) maxLevel = a.level;
+    });
+    var driverIdx = -1;
+    for (var i = 0; i < state.answers.length; i++) {
+      if (state.answers[i].level === maxLevel) {
+        driverIdx = i;
+        break;
+      }
+    }
+
+    var html = '<div class="dtree-classification-detail">';
+    html += '<div class="dtree-classification-detail-title">Why this classification?</div>';
+    state.answers.forEach(function(a, idx) {
+      html += '<div class="dtree-classification-row">';
+      html += '<span class="dtree-classification-label">' + escapeHtml(a.criteriaLabel) + ':</span>';
+      html += '<span class="dtree-classification-value">' + escapeHtml(a.optionTitle);
+      if (idx === driverIdx && state.answers.length > 1) {
+        // Only flag the driving criterion if more than one answer (otherwise it's redundant)
+        var anyOther = false;
+        for (var j = 0; j < state.answers.length; j++) {
+          if (j !== driverIdx && state.answers[j].level !== maxLevel) { anyOther = true; break; }
+        }
+        if (anyOther) {
+          html += '<span class="dtree-classification-driver">drives classification</span>';
+        }
+      }
+      html += '</span>';
+      html += '</div>';
+    });
+
+    var authText = CRITERIA.authByLevel[maxLevel] || '';
+    if (authText) {
+      html += '<div class="dtree-classification-auth">';
+      html += '<strong>Authorisation needed:</strong> ' + escapeHtml(authText) + '.';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  // Resolve an href value from the URLS config.
+  // Empty strings fall back to '#' so the button still renders but doesn't navigate.
+  function resolveHref(href) {
+    if (href === undefined || href === null || href === '') return '#';
+    return href;
+  }
+
+  // Substitute {{urlName}} placeholders in footnote strings with values from URLS.
+  // Falls back to '#' if a key is missing or empty.
+  function resolveFootnote(footnote) {
+    return footnote.replace(/\{\{(\w+)\}\}/g, function(match, key) {
+      var url = URLS[key];
+      if (url === undefined || url === null || url === '') return '#';
+      return url;
+    });
+  }
+
+  // ============================================================
+  // EVENTS
+  // ============================================================
+  function attachListeners() {
+    var optionButtons = widget.querySelectorAll('.dtree-option');
+    optionButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var idx = parseInt(btn.getAttribute('data-option-idx'), 10);
+        var currentQ = tree.questions[state.current];
+        if (!currentQ) return;
+        var picked = currentQ.options[idx];
+        state.history.push(state.current);
+        // Record this option's level (or null if it doesn't carry one) so the
+        // history of levels mirrors the history of questions exactly.
+        state.levels.push(typeof picked.level === 'number' ? picked.level : null);
+
+        // Capture the answer for the "why this classification?" panel.
+        // Only meaningful for classification questions (those with a criteriaLabel).
+        if (currentQ.criteriaLabel && typeof picked.level === 'number') {
+          state.answers.push({
+            criteriaLabel: currentQ.criteriaLabel,
+            optionTitle: picked.title,
+            level: picked.level
+          });
+        }
+
+        if (picked.next === 'classify') {
+          // Special "classify" pseudo-id: compute max level from history
+          // and navigate to the appropriate L1/L2/L3 result.
+          var maxLevel = 0;
+          state.levels.forEach(function(lvl) {
+            if (typeof lvl === 'number' && lvl > maxLevel) maxLevel = lvl;
+          });
+          // If every criterion was skipped ("Not sure"), there's nothing to
+          // classify on, so route to a PBT conversation instead of guessing.
+          if (maxLevel === 0) {
+            state.current = 'r-not-sure-yet';
+          } else {
+            state.current = 'r-level-' + maxLevel;
+          }
+          state.showingResult = true;
+        } else if (picked.next) {
+          state.current = picked.next;
+          state.showingResult = false;
+        } else if (picked.result) {
+          state.current = picked.result;
+          state.showingResult = true;
+        }
+        render();
+        scrollToTop();
+      });
+    });
+
+    // Disclosure toggle (criteria reference panel)
+    var discBtn = document.getElementById('dtree-disclosure-toggle');
+    if (discBtn) {
+      discBtn.addEventListener('click', function() {
+        state.disclosureOpen = !state.disclosureOpen;
+        var disc = document.getElementById('dtree-disclosure');
+        if (disc) {
+          disc.classList.toggle('open', state.disclosureOpen);
+          discBtn.setAttribute('aria-expanded', state.disclosureOpen ? 'true' : 'false');
+        }
+        // Note: we deliberately don't re-render the whole widget here, just toggle
+        // the class. This keeps the user's scroll position and avoids flicker.
+      });
+    }
+
+    var backBtn = document.getElementById('dtree-back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', function() {
+        if (state.history.length === 0) return;
+        var poppedQuestionId = state.history.pop();
+        state.levels.pop();  // Keep levels stack aligned with history
+        // If the question we're going back from was a classification question
+        // we also captured an answer for, pop it from the answers stack.
+        var poppedQuestion = tree.questions[poppedQuestionId];
+        if (poppedQuestion && poppedQuestion.criteriaLabel && state.answers.length > 0) {
+          state.answers.pop();
+        }
+        state.current = poppedQuestionId;
+        state.showingResult = false;
+        render();
+        scrollToTop();
+      });
+    }
+
+    var restartBtn = document.getElementById('dtree-restart-btn');
+    if (restartBtn) {
+      restartBtn.addEventListener('click', function() {
+        state.history = [];
+        state.levels = [];
+        state.answers = [];
+        state.disclosureOpen = false;
+        state.current = 'q-risk';
+        state.showingResult = false;
+        render();
+        scrollToTop();
+      });
+    }
+  }
+
+  // ============================================================
+  // UTILITIES
+  // ============================================================
+  function escapeHtml(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+  function escapeAttr(str) {
+    if (str === undefined || str === null) return '';
+    return String(str).replace(/"/g, '&quot;');
+  }
+  function scrollToTop() {
+    // Smooth-scroll the widget into view (helpful in SharePoint where the page might be long)
+    try {
+      widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) {
+      // Fallback for older browsers
+      widget.scrollIntoView();
+    }
+  }
+
+  // Kick off
+  render();
+})();
+</script>
+
+</body>
+</html>
