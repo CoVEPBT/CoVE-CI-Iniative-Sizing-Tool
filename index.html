@@ -291,6 +291,14 @@
   .dtree-question {
     margin-bottom: 8px;
   }
+  .dtree-q-criteria-tag {
+    color: var(--rmit-red);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
   .dtree-q-title {
     color: var(--rmit-navy);
     font-size: 22px;
@@ -316,7 +324,7 @@
     background: #fff;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 16px 20px;
+    padding: 18px 20px;
     font-family: inherit;
     font-size: 15px;
     cursor: pointer;
@@ -342,14 +350,29 @@
   }
   .dtree-option-title {
     display: block;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: var(--rmit-navy);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
   .dtree-option-desc {
     display: block;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--ink-muted);
+  }
+  .dtree-option-bullets {
+    margin: 0;
+    padding: 0 0 0 18px;
+    list-style: disc;
+  }
+  .dtree-option-bullets li {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 3px;
+  }
+  .dtree-option-bullets li:last-child {
+    margin-bottom: 0;
   }
   .dtree-option-arrow {
     color: var(--ink-muted);
@@ -396,13 +419,54 @@
     text-transform: uppercase;
     margin-bottom: 6px;
   }
+  .dtree-result-level {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .dtree-result-level-num {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--rmit-navy);
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .dtree-result-level-text {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--rmit-navy);
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+  }
+  .dtree-result-level-approach {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .dtree-result.variant-sponsor .dtree-result-level-num { background: var(--act); }
+  .dtree-result.variant-sponsor .dtree-result-level-text { color: var(--act); }
+  .dtree-result.variant-warn .dtree-result-level-num { background: #B8860B; }
+  .dtree-result.variant-warn .dtree-result-level-text { color: var(--bg-warn-ink); }
+  .dtree-result.variant-warn .dtree-result-level-approach { color: var(--bg-warn-ink); opacity: 0.75; }
   .dtree-result-title {
     color: var(--rmit-navy);
-    font-size: 24px;
+    font-size: 19px;
     font-weight: 700;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     letter-spacing: -0.2px;
-    line-height: 1.25;
+    line-height: 1.3;
   }
   .dtree-result-why {
     color: var(--ink-soft);
@@ -509,8 +573,12 @@
     .dtree-title { font-size: 20px; }
     .dtree-q-title { font-size: 19px; }
     .dtree-option { padding: 14px 16px; font-size: 14px; }
+    .dtree-option-title { font-size: 16px; }
+    .dtree-option-bullets li { font-size: 14px; }
     .dtree-result { padding: 22px 20px 20px; }
-    .dtree-result-title { font-size: 20px; }
+    .dtree-result-title { font-size: 17px; }
+    .dtree-result-level-num { width: 44px; height: 44px; font-size: 22px; }
+    .dtree-result-level-text { font-size: 22px; }
     .dtree-btn-primary, .dtree-btn-secondary { width: 100%; justify-content: center; }
   }
 
@@ -594,11 +662,11 @@
         id: 1,
         name: 'Level 1',
         rows: [
-          { label: 'Risk',          text: 'Low. Minor operational impact if unsuccessful; easily reversible with minimal disruption. No compliance or reputational implications.' },
-          { label: 'Scale',         text: 'Small/localised. Affects 1-2 teams within a single department; within direct control, no broader impact.' },
-          { label: 'Complexity',    text: 'Low. Single process change with minimal dependencies; no IT or policy changes; quick to test and implement.' },
-          { label: 'Stakeholder impact',  text: 'Low. Minimal BAU disruption; 1-10 stakeholders affected; minimal training required (e.g. brief communication or single session).' },
-          { label: 'Authorisation', text: 'Manager or Associate Director' },
+          { label: 'Risk',          text: 'Low. Easy to reverse if it doesn\u2019t work. No to minimal cost. No compliance or reputation impact. No change to core systems, policies or governance procedures.' },
+          { label: 'Impact',        text: 'Low. Minimal disruption to business as usual. Small number of students and/or staff affected (approximately 1-10); minimal training required. No change to how stakeholders interact with systems, policies or governance procedures.' },
+          { label: 'Complexity',    text: 'Low. Single process or practice change with minimal dependencies. No IT build required. Quick to design, test and adjust; no specialist expertise needed.' },
+          { label: 'Control',       text: 'Full control. The initiating team can design, test and implement the change independently, within their own remit. No external approvals needed beyond your manager\u2019s sign-off.' },
+          { label: 'Authorisation', text: 'Manager' },
           { label: 'Approach',      text: 'PDCA cycle: Plan, Do, Check, Act' }
         ]
       },
@@ -606,10 +674,10 @@
         id: 2,
         name: 'Level 2',
         rows: [
-          { label: 'Risk',          text: 'Low to moderate. Some operational impact, including temporary workflow disruption across teams. Minor compliance considerations and potential departmental reputation impact.' },
-          { label: 'Scale',         text: 'Moderate. Affects 2-3 teams and may involve 1-2 additional departments; requires coordination across groups.' },
-          { label: 'Complexity',    text: 'Moderate. Multiple interconnected elements; requires process mapping, stakeholder consultation, and possible policy or system adjustments.' },
-          { label: 'Stakeholder impact',  text: 'Moderate. Moderate disruption during implementation; multiple teams affected (10-30 staff); structured training (e.g. workshops, documentation) required.' },
+          { label: 'Risk',          text: 'Moderate. Can be undone, but requires significant rework or time. Moderate cost. Minor compliance or reputation considerations.' },
+          { label: 'Impact',        text: 'Moderate. Significant changes in how staff and/or students work. Moderate disruption to day-to-day work while it’s rolled out (multiple teams or a cohort affected, roughly 10-30 staff); structured training required.' },
+          { label: 'Complexity',    text: 'Moderate. Multiple interconnected process elements. Minor IT configuration or tool changes; may require process mapping and some specialist input.' },
+          { label: 'Control',       text: 'Shared control. Some elements need input, resourcing or sign-off from other teams or departments. Testing and implementation depend on cooperation from stakeholders outside your direct control.' },
           { label: 'Authorisation', text: 'Associate Director or Associate DVC' },
           { label: 'Approach',      text: '7-Step CI Lifecycle, with PBT facilitation support' }
         ]
@@ -618,10 +686,10 @@
         id: 3,
         name: 'Level 3',
         rows: [
-          { label: 'Risk',          text: 'Moderate to high. Significant operational, compliance, reputational or wellbeing impact. Difficult or costly to reverse; may involve regulatory or financial implications.' },
-          { label: 'Scale',         text: 'Large/cross-college. Impacts multiple departments or the entire college; involves enterprise functions (e.g. IT, HR, Finance) and broad stakeholder groups.' },
-          { label: 'Complexity',    text: 'High. Complex systems with many interdependencies; requires significant planning, phased implementation, and may include technology, policy and cultural change.' },
-          { label: 'Stakeholder impact',  text: 'High. Significant BAU disruption across the college; large number of stakeholders impacted; requires comprehensive training and formal change management.' },
+          { label: 'Risk',          text: 'Moderate to high. Difficult or costly to reverse. May involve compliance, regulatory or financial implications (for example, financial impact greater than $50K or requiring a business case). College-wide reputational risk.' },
+          { label: 'Impact',        text: 'High. A major change affecting how the college works, often college-wide (30+ staff, or a broad student cohort). Big disruption to day-to-day work; comprehensive training and formal change management required.' },
+          { label: 'Complexity',    text: 'High. Many interdependent systems or processes. May require a major IT build or integration and specialist expertise. Needs detailed analysis, significant planning and staged implementation.' },
+          { label: 'Control',       text: 'Limited control. Design, testing and implementation depend on decisions, resourcing or formal authorisation from senior stakeholders or areas outside PBT/P&D (for example IT, Compliance or Executive).' },
           { label: 'Authorisation', text: 'Associate DVC or VELT' },
           { label: 'Approach',      text: 'Full CI lifecycle, formal governance, milestone reporting to VELT' }
         ]
@@ -629,7 +697,7 @@
     ],
     // Authorisation text used inside the result cards (matches the tiers above)
     authByLevel: {
-      1: 'Your manager or Associate Director',
+      1: 'Your manager',
       2: 'Associate Director or Associate DVC',
       3: 'Associate DVC or VELT'
     }
@@ -650,63 +718,88 @@
   var tree = {
     questions: {
       // ---- Sizing / classification questions ----
-      // Four criteria from the CoVE CI Level Definitions: Risk, Scale,
-      // Complexity, Stakeholder impact. Each carries a level; the highest
-      // single level reached across all four sets the classification.
+      // Four criteria from the CoVE CI Level Definitions: Risk, Impact,
+      // Complexity, Control. Each carries a level; the highest single level
+      // reached across all four sets the classification.
       // "Not sure" carries no level and skips to the next criterion.
       'q-risk': {
         title: 'What happens if the change does not work?',
-        help: 'Think about how easily it could be reversed and who would feel it.',
+        help: 'Think about how easy it is to undo, and whether it could cost money or affect compliance.',
         showCriteria: true,
         criteriaLabel: 'Risk',
         options: [
           {
             title: 'Low',
-            desc: 'Minor operational impact if unsuccessful; easily reversible with minimal disruption. No compliance or reputational implications.',
-            next: 'q-scale',
+            bullets: [
+              'Easy to undo if it does not work',
+              'No to minimal cost',
+              'No compliance or reputation impact',
+              'No change to systems or policies'
+            ],
+            next: 'q-impact',
             level: 1
           },
           {
-            title: 'Low to moderate',
-            desc: 'Some operational impact, including temporary workflow disruption across teams. Minor compliance considerations and potential departmental reputation impact.',
-            next: 'q-scale',
+            title: 'Moderate',
+            bullets: [
+              'Can be undone, but requires significant rework or time',
+              'Moderate cost',
+              'Minor compliance or reputation considerations'
+            ],
+            next: 'q-impact',
             level: 2
           },
           {
             title: 'Moderate to high',
-            desc: 'Significant operational, compliance, reputational or wellbeing impact. Difficult or costly to reverse; may involve regulatory or financial implications.',
-            next: 'q-scale',
+            bullets: [
+              'Hard or costly to undo',
+              'May cost more than $50K, or need a business case',
+              'Could affect compliance, reputation or core systems college-wide'
+            ],
+            next: 'q-impact',
             level: 3
           },
           {
             title: 'Not sure yet',
             desc: 'Skip this one for now.',
-            next: 'q-scale'
+            next: 'q-impact'
           }
         ]
       },
 
-      'q-scale': {
-        title: 'How wide is the change?',
-        help: 'How many teams or departments does it touch?',
+      'q-impact': {
+        title: 'Who is affected, and how much do they need to change?',
+        help: 'Think about students and staff, and how much they\u2019ll need to change what they do.',
         showCriteria: true,
-        criteriaLabel: 'Scale',
+        criteriaLabel: 'Impact',
         options: [
           {
-            title: 'Small and localised',
-            desc: 'Affects 1-2 teams within a single department; within direct control, no broader impact.',
+            title: 'Low',
+            bullets: [
+              'A small number of students or staff affected (about 1-10)',
+              'Little to no change in how they work',
+              'Minimal training needed'
+            ],
             next: 'q-complexity',
             level: 1
           },
           {
             title: 'Moderate',
-            desc: 'Affects 2-3 teams and may involve 1-2 additional departments; requires coordination across groups.',
+            bullets: [
+              'A cohort or several teams affected (about 10-30 staff)',
+              'Significant changes in how people work',
+              'Structured training needed, e.g. workshops or guides'
+            ],
             next: 'q-complexity',
             level: 2
           },
           {
-            title: 'Large or cross-college',
-            desc: 'Impacts multiple departments or the entire college; involves enterprise functions (e.g. IT, HR, Finance) and broad stakeholder groups.',
+            title: 'High',
+            bullets: [
+              'A large group affected, often college-wide (30+ staff or a broad student cohort)',
+              'A major change affecting how the college works',
+              'Comprehensive training and change management needed'
+            ],
             next: 'q-complexity',
             level: 3
           },
@@ -720,57 +813,78 @@
 
       'q-complexity': {
         title: 'How complex is the change to make?',
-        help: 'Think about dependencies, systems, and how much planning it needs.',
+        help: 'Think about dependencies, systems, and how much planning or specialist input it needs.',
         showCriteria: true,
         criteriaLabel: 'Complexity',
         options: [
           {
             title: 'Low',
-            desc: 'A single process change with minimal dependencies; no IT or policy changes; quick to test and implement.',
-            next: 'q-stakeholder',
+            bullets: [
+              'A single process or practice change',
+              'No IT build needed',
+              'Quick to design, test and adjust'
+            ],
+            next: 'q-control',
             level: 1
           },
           {
             title: 'Moderate',
-            desc: 'Multiple interconnected elements; requires process mapping, stakeholder consultation, and possible policy or system adjustments.',
-            next: 'q-stakeholder',
+            bullets: [
+              'Several connected process steps',
+              'Minor IT or tool changes',
+              'Needs some specialist input'
+            ],
+            next: 'q-control',
             level: 2
           },
           {
             title: 'High',
-            desc: 'Complex systems with many interdependencies; requires significant planning, phased implementation, and may include technology, policy and cultural change.',
-            next: 'q-stakeholder',
+            bullets: [
+              'Many connected systems or processes',
+              'May need a major IT build or integration',
+              'Needs detailed planning and a staged rollout'
+            ],
+            next: 'q-control',
             level: 3
           },
           {
             title: 'Not sure yet',
             desc: 'Skip this one for now.',
-            next: 'q-stakeholder'
+            next: 'q-control'
           }
         ]
       },
 
-      'q-stakeholder': {
-        title: 'How many people does it affect, and how much?',
-        help: 'Consider disruption to business as usual and the training needed.',
+      'q-control': {
+        title: 'How much control do you have over making this change?',
+        help: 'Think about who else needs to say yes before you can go ahead.',
         showCriteria: true,
-        criteriaLabel: 'Stakeholder impact',
+        criteriaLabel: 'Control',
         options: [
           {
-            title: 'Low',
-            desc: 'Minimal BAU disruption; 1-10 stakeholders affected; minimal training required (e.g. brief communication or single session).',
+            title: 'Full control',
+            bullets: [
+              'Your team can design, test and implement it alone',
+              'No approvals needed beyond your manager'
+            ],
             next: 'classify',
             level: 1
           },
           {
-            title: 'Moderate',
-            desc: 'Moderate disruption during implementation; multiple teams affected (10-30 staff); structured training such as workshops or documentation required.',
+            title: 'Shared control',
+            bullets: [
+              'Needs input or sign-off from other teams or departments',
+              'Testing depends on their cooperation'
+            ],
             next: 'classify',
             level: 2
           },
           {
-            title: 'High',
-            desc: 'Significant BAU disruption across the college; a large number of stakeholders impacted; requires comprehensive training and formal change management.',
+            title: 'Limited control',
+            bullets: [
+              'Needs approval from senior stakeholders (e.g. IT, Compliance, Executive)',
+              'Multiple external approvals required'
+            ],
             next: 'classify',
             level: 3
           },
@@ -788,26 +902,29 @@
 
       'r-level-1': {
         variant: 'lead',
-        eyebrow: 'Recommended level: Level 1, PDCA cycle',
-        title: 'A small-scale (Level 1) improvement looks like the best fit',
-        why: 'Based on what you\u2019ve said, this reads as a <strong>small, low-risk change within your team</strong>, so a <strong>PDCA cycle</strong> is the recommended starting point: plan a small test, run it on a small scale, check what happened, then decide what to do next. Roughly 4-6 hours of work across 2-3 weeks, and you can run it with your manager\u2019s sign-off. This is a guide rather than a rule, so if your situation feels different, PBT can help you sense-check it.',
-        footnote: 'The toolkit page has a Delegation Brief your sponsor will need to sign. Talk to PBT first if you want a sense-check before starting.'
+        level: 1,
+        eyebrow: 'PDCA cycle',
+        title: 'A small, low-risk change you can run within your team.',
+        why: 'Plan a small test, try it, check the results, then decide what\u2019s next.',
+        footnote: 'This is a guide, not a rule \u2014 talk to PBT if your situation feels different.'
       },
 
       'r-level-2': {
         variant: 'sponsor',
-        eyebrow: 'Recommended level: Level 2, 7-Step CI Lifecycle',
-        title: 'A Level 2 improvement looks like the recommended fit, with PBT support',
-        why: 'Based on what you\u2019ve said, this change <strong>crosses team or department boundaries</strong> with moderate complexity, which points beyond a small-scale PDCA cycle. The recommended approach is the <strong>7-Step CI Lifecycle</strong>: identify, analyse, solve, implement and measure, with PBT facilitation support and formal approvals along the way. Treat this as a guide, and PBT can confirm the right pathway with you.',
-        footnote: 'PBT will help you scope the work and identify the right governance pathway.'
+        level: 2,
+        eyebrow: '7-Step CI Lifecycle',
+        title: 'A change that needs support from other teams, with PBT alongside you.',
+        why: 'Identify, analyse, solve, implement and measure, with PBT facilitation and formal approvals along the way.',
+        footnote: 'Discuss the right time, resourcing and authorisation for this work with your manager, and loop in PBT to confirm the pathway. Further tools to support Level 2 initiatives are in development.'
       },
 
       'r-level-3': {
         variant: 'warn',
-        eyebrow: 'Recommended level: Level 3, formal governance',
-        title: 'This is likely to need formal governance and senior sponsorship',
-        why: 'Based on what you\u2019ve said, this reads as a <strong>large, cross-departmental change</strong> with significant impact and risk, which points well beyond a small-scale improvement. The recommended pathway involves formal project governance, milestone reporting and senior sponsorship before work starts. This is a guide to help you plan the conversation, and PBT with your Associate Director can shape the detail with you.',
-        footnote: 'Start with PBT and your Associate Director \u2014 they\u2019ll help shape it into the right kind of initiative and route it through formal governance.'
+        level: 3,
+        eyebrow: 'Formal governance',
+        title: 'A large, high-impact change that needs senior sponsorship.',
+        why: 'This needs formal project governance, milestone reporting and sign-off before work starts.',
+        footnote: 'Discuss the right time, resourcing and authorisation for this work with your manager, then start with PBT and your Associate Director to shape it and route it through governance. Further tools to support Level 3 initiatives are in development.'
       },
 
       // ---- Other endpoints ----------------------------------------------
@@ -815,8 +932,8 @@
       'r-not-sure-yet': {
         variant: 'warn',
         eyebrow: 'Worth a conversation first',
-        title: 'Start with a 30-minute chat with PBT',
-        why: 'If you don\u2019t yet know the scope or impact of your idea, that\u2019s normal at this stage. The fastest way forward is a <strong>short conversation with PBT</strong> to help you shape it. They\u2019ll help you work out whether it\u2019s a small-scale improvement, a bigger CI initiative, or something else entirely \u2014 and what to do next.',
+        title: 'Start with a 30-minute chat with PBT.',
+        why: 'If you\u2019re not sure of the scope yet, that\u2019s normal \u2014 a quick conversation will help shape it and figure out what\u2019s next.',
         footnote: 'PBT contacts: Natalie Gray or Deanne Roze.'
       }
     }
@@ -824,7 +941,7 @@
 
 
   // Total questions in the longest path (for progress indicator).
-  // Longest path: q-risk \u2192 q-scale \u2192 q-complexity \u2192 q-stakeholder \u2192 result, so 4 questions.
+  // Longest path: q-risk \u2192 q-impact \u2192 q-complexity \u2192 q-control \u2192 result, so 4 questions.
   var MAX_QUESTIONS = 4;
 
   // ============================================================
@@ -887,6 +1004,9 @@
 
   function renderQuestion(q) {
     var html = '<div class="dtree-question">';
+    if (q.criteriaLabel) {
+      html += '<div class="dtree-q-criteria-tag">' + escapeHtml(q.criteriaLabel.toUpperCase()) + '</div>';
+    }
     html += '<h2 class="dtree-q-title">' + escapeHtml(q.title) + '</h2>';
     if (q.help) {
       html += '<p class="dtree-q-help">' + escapeHtml(q.help) + '</p>';
@@ -902,7 +1022,13 @@
       html += '<button class="dtree-option" data-option-idx="' + idx + '">';
       html += '<span class="dtree-option-text">';
       html += '<span class="dtree-option-title">' + escapeHtml(opt.title) + '</span>';
-      if (opt.desc) {
+      if (opt.bullets && opt.bullets.length > 0) {
+        html += '<ul class="dtree-option-bullets">';
+        opt.bullets.forEach(function(pt) {
+          html += '<li>' + escapeHtml(pt) + '</li>';
+        });
+        html += '</ul>';
+      } else if (opt.desc) {
         html += '<span class="dtree-option-desc">' + escapeHtml(opt.desc) + '</span>';
       }
       html += '</span>';
@@ -945,7 +1071,16 @@
   function renderResult(r) {
     var variantClass = 'variant-' + (r.variant || 'lead');
     var html = '<div class="dtree-result ' + variantClass + '">';
-    html += '<div class="dtree-result-eyebrow">' + escapeHtml(r.eyebrow) + '</div>';
+    if (r.level) {
+      html += '<div class="dtree-result-level">';
+      html += '<span class="dtree-result-level-num">' + r.level + '</span>';
+      html += '<span class="dtree-result-level-text">LEVEL ' + r.level;
+      html += '<span class="dtree-result-level-approach">' + escapeHtml(r.eyebrow) + '</span>';
+      html += '</span>';
+      html += '</div>';
+    } else {
+      html += '<div class="dtree-result-eyebrow">' + escapeHtml(r.eyebrow) + '</div>';
+    }
     html += '<h2 class="dtree-result-title">' + escapeHtml(r.title) + '</h2>';
     html += '<p class="dtree-result-why">' + r.why + '</p>';  // why allows HTML (strong tags)
 
@@ -988,7 +1123,7 @@
     }
 
     var html = '<div class="dtree-classification-detail">';
-    html += '<div class="dtree-classification-detail-title">Why this classification?</div>';
+    html += '<div class="dtree-classification-detail-title">Why this level?</div>';
     state.answers.forEach(function(a, idx) {
       html += '<div class="dtree-classification-row">';
       html += '<span class="dtree-classification-label">' + escapeHtml(a.criteriaLabel) + ':</span>';
